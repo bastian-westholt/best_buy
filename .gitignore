@@ -1,0 +1,6 @@
+# Directories
+.claude
+.idea
+
+# Environment-Variables
+.env

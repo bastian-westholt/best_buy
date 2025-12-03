@@ -22,13 +22,13 @@ class Store:
         active_products = []
         for product in self.products:
             if product.active:
-                product.show()
                 active_products.append(product)
         return active_products
 
     def order(self, shopping_list):
         order_total = 0
         for product, amount in shopping_list:
+            print(f'{product.name}......{product.price:.2f} € per unit --> ({amount})')
             order_total += product.buy(amount)
         return order_total
 

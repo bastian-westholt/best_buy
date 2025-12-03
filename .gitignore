@@ -4,3 +4,6 @@
 
 # Environment-Variables
 .env
+
+# Generic files
+CLAUDE.md

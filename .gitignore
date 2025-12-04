@@ -1,9 +1,15 @@
 # Directories
-.claude
-.idea
+.claude/
+.idea/
+archive/
+docs/
+__pycache__/
 
 # Environment-Variables
 .env
 
 # Generic files
 CLAUDE.md
+archive/test_products.py
+archive/generate_todo_docx.py
+docs/Error-Handling_ToDo-Liste.md

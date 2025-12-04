@@ -12,11 +12,11 @@
 
 ---
 
-Ein Shop-Backend, das ich während meiner Masterschool-Ausbildung entwickelt habe. Der Fokus lag auf Error-Handling und OOP-Patterns.
+A shop backend I developed during my Masterschool training. The focus was on error handling and OOP patterns.
 
-## Was macht das Projekt?
+## What does this project do?
 
-Ein einfaches E-Commerce-System für einen Elektronik-Store. CLI-basiert, keine UI - nur Backend-Logik. Das Projekt startete mit bewusst eingebauten Bugs, die ich dann systematisch identifiziert und behoben habe.
+A simple e-commerce system for an electronics store. CLI-based, no UI - just backend logic. The project started with intentionally included bugs, which I then systematically identified and fixed.
 
 ## Setup
 
@@ -26,71 +26,71 @@ cd best_buy
 python3 main.py
 ```
 
-Keine Dependencies erforderlich, läuft mit Standard-Python.
+No dependencies required, runs with standard Python.
 
-## Wie es funktioniert
+## How it works
 
 ### Product Class
-Verwaltet einzelne Produkte. Name, Preis und Lagermenge werden validiert bevor sie akzeptiert werden. Wenn der Stock auf 0 fällt, wird das Produkt automatisch deaktiviert. Die `buy()` Methode prüft die Lagerverfügbarkeit vor dem Kauf.
+Manages individual products. Name, price, and quantity are validated before being accepted. When stock reaches 0, the product is automatically deactivated. The `buy()` method checks stock availability before purchase.
 
 ### Store Class
-Verwaltet die Produktkollektion. Der Constructor stellt sicher, dass nur Product-Objekte hinzugefügt werden. Beim Hinzufügen wird geprüft, ob das Produkt bereits existiert. Die `order()` Methode ermöglicht den Kauf mehrerer Produkte.
+Manages the product collection. The constructor ensures that only Product objects are added. When adding products, it checks if the product already exists. The `order()` method enables purchasing multiple products.
 
 ### Main Program
-CLI mit 4 Optionen: Produkte auflisten, Gesamtbestand anzeigen, Bestellung aufgeben, Programm beenden. Input-Validierung ist durchgehend implementiert - bei ungültigen Eingaben werden aussagekräftige Fehlermeldungen angezeigt statt eines Crashes.
+CLI with 4 options: list products, show total stock, place order, quit. Input validation is implemented throughout - invalid inputs display meaningful error messages instead of crashing.
 
-## Was ich dabei gelernt habe
+## What I learned
 
-### Der Range-Check Bug
-Der subtilste Fehler war `if x < len() or x > len()` - sieht auf den ersten Blick korrekt aus, ist aber logisch falsch. Mit `or` ist die Bedingung fast immer true. Korrekt wäre `if x < 1 or x > len()`. Diese Erfahrung hat mir gezeigt, wie wichtig es ist, Boolean Logic sorgfältig zu prüfen.
+### The Range-Check Bug
+The most subtle error was `if x < len() or x > len()` - looks correct at first glance, but is logically wrong. With `or`, the condition is almost always true. Correct would be `if x < 1 or x > len()`. This experience showed me how important it is to carefully check Boolean logic.
 
 ### Exception Handling Strategy
-Business Logic (products.py, store.py) wirft Exceptions bei Regelverletzungen. Presentation Layer (main.py) fängt diese ab und zeigt dem User verständliche Meldungen. Keine print() Statements in der Business Logic, try-except Blöcke nur dort wo sie hingehören.
+Business logic (products.py, store.py) raises exceptions when rules are violated. Presentation layer (main.py) catches these and shows the user understandable messages. No print() statements in business logic, try-except blocks only where they belong.
 
-### Type Checks vor Value Checks
-Erst den Typ prüfen, dann den Wert validieren. Sonst kann `if not price` bei 0 fälschlicherweise einen Fehler werfen, obwohl 0 ein valider Preis sein kann.
+### Type Checks before Value Checks
+Check the type first, then validate the value. Otherwise `if not price` can incorrectly throw an error at 0, even though 0 can be a valid price.
 
 ```python
-# Korrekte Reihenfolge
+# Correct order
 if not isinstance(price, (int, float)):
     raise TypeError('Price must be numeric')
 if price < 0:
     raise ValueError('Price cannot be negative')
 ```
 
-### 0 ist nicht "empty"
-Bei Strings ist `""` empty. Bei Zahlen ist `None` empty. Aber `0` ist ein valider Wert, nicht empty. Ein wichtiger Unterschied, den man beachten muss.
+### 0 is not "empty"
+For strings, `""` is empty. For numbers, `None` is empty. But `0` is a valid value, not empty. An important distinction to keep in mind.
 
-## Projekt Status
+## Project Status
 
-Alle CRITICAL (7/7) und HIGH Priority (7/7) Bugs sind behoben. Von 20 identifizierten Issues sind 14 erledigt. Die restlichen 6 sind Edge Cases, die in der Praxis selten auftreten (z.B. Produktnamen die nur aus Leerzeichen bestehen).
+All CRITICAL (7/7) and HIGH Priority (7/7) bugs are fixed. Out of 20 identified issues, 14 are resolved. The remaining 6 are edge cases that rarely occur in practice (e.g., product names consisting only of whitespace).
 
-Der Code ist production-ready. Es gibt keine bekannten Bugs, die das Programm zum Absturz bringen können.
+The code is production-ready. There are no known bugs that can crash the program.
 
 ## Testing
 
-Getestete Szenarien:
-- Text-Input bei erwarteten Zahlenwerten
-- Negative Zahlen
-- Produktnummer 0 oder außerhalb des gültigen Bereichs
-- Bestellmenge übersteigt Lagerbestand
-- Versuche 0 Stück zu kaufen
-- Duplikat-Produkte hinzufügen
-- Ctrl+C während der Programmausführung
+Tested scenarios:
+- Text input when numeric values are expected
+- Negative numbers
+- Product number 0 or outside valid range
+- Order quantity exceeds stock
+- Attempting to buy 0 items
+- Adding duplicate products
+- Ctrl+C during program execution
 
-Alle Fälle werden sauber abgefangen mit aussagekräftigen Error-Messages.
+All cases are cleanly handled with meaningful error messages.
 
-## Technisches
+## Technical
 
-- Python 3.x (getestet mit 3.13)
-- Keine externen Dependencies
+- Python 3.x (tested with 3.13)
+- No external dependencies
 - SOLID Principles, Design by Contract
-- Exception Types: TypeError, ValueError, IndexError, KeyboardInterrupt
+- Exception types: TypeError, ValueError, IndexError, KeyboardInterrupt
 
 ## Best "Bye" Easter Egg
 
-Die Exit-Nachricht lautet "Thank you for choosing BEST BYE!" - der Typo ist beabsichtigt. 😉
+The exit message says "Thank you for choosing BEST BYE!" - the typo is intentional. 😉
 
 ---
 
-**Masterschool E-Commerce Backend** | Dezember 2025 | Bastian
+**Masterschool E-Commerce Backend** | December 2025 | Bastian

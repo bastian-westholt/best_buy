@@ -16,7 +16,7 @@ A shop backend I developed during my Masterschool training. The focus was on err
 
 ## What does this project do?
 
-A simple e-commerce system for an electronics store. CLI-based, no UI - just backend logic. The project started with intentionally included bugs, which I then systematically identified and fixed.
+A simple e-commerce system for an electronics store. CLI-based, no UI - just backend logic. During development, I focused on getting the core logic working first, then systematically identified and fixed all bugs through thorough testing and code review.
 
 ## Setup
 

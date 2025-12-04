@@ -1,8 +1,12 @@
   
- `____  _____ ____ _____   ____  _   ___   __ | __ )| ____/ ___|_   _| | __ )| | |   / / |  _ |  _| ___  | |   |  _ | | | | V / | |_) | |___ ___) || |   | |_) | |_| | | | |____/|_____|____/ |_|   |____/ ___/  |_|  -- Y O U R   S H O W C A S E   S T O R E --`  
-  
-  
+ ____  _____ ____ _____   ____  _   ___   __
+| __ )| ____/ ___|_   _| | __ )| | | \ \ / /
+|  _ \|  _| \___ \ | |   |  _ \| | | |\ V /
+| |_) | |___ ___) || |   | |_) | |_| | | |
+|____/|_____|____/ |_|   |____/ \___/  |_|
 
+--- O U R   S H O W C A S E   S T O R E --- 
+  
 ---
 
 Ein Python-basiertes Shop-System mit vollständigem Error-Handling. Entstanden während meiner Masterschool-Ausbildung als Lernprojekt für OOP und Exception-Handling.

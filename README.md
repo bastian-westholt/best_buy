@@ -12,172 +12,85 @@
 
 ---
 
-Ein Python-basiertes Shop-System mit vollständigem Error-Handling. Entstanden während meiner Masterschool-Ausbildung als Lernprojekt für OOP und Exception-Handling.
+Ein Shop-Backend, das ich während meiner Masterschool-Ausbildung entwickelt habe. Der Fokus lag auf Error-Handling und OOP-Patterns.
 
-## Was ist das hier?
+## Was macht das Projekt?
 
-Ein simples aber robustes E-Commerce-Backend für einen Elektronik-Store. Keine fancy UI, nur solide Python-Logik mit Fokus auf Error-Handling und Validierung.
+Ein einfaches E-Commerce-System für einen Elektronik-Store. CLI-basiert, keine UI - nur Backend-Logik. Das Projekt startete mit bewusst eingebauten Bugs, die ich dann systematisch identifiziert und behoben habe.
 
-## Features
-
--   **Produktverwaltung**: Produkte hinzufügen, entfernen, anzeigen
--   **Lagerverwaltung**: Automatische Deaktivierung bei ausverkauften Produkten
--   **Bestellsystem**: Stock-Validierung, verhindert Überbestellungen
--   **Robuste Input-Validierung**: Fängt ungültige Eingaben ab (Text statt Zahlen, negative Werte, etc.)
--   **Error-Handling**: Business Logic raised Exceptions, Presentation Layer catched sie - so wie es sein soll
-
-## Quick Start
+## Setup
 
 ```bash
-# Clone the repo
 git clone <repo-url>
 cd best_buy
-
-# Run it
 python3 main.py
 ```
 
-Keine Dependencies nötig, läuft mit Standard-Python.
+Keine Dependencies erforderlich, läuft mit Standard-Python.
 
 ## Wie es funktioniert
 
-### Product Class (`products.py`)
+### Product Class
+Verwaltet einzelne Produkte. Name, Preis und Lagermenge werden validiert bevor sie akzeptiert werden. Wenn der Stock auf 0 fällt, wird das Produkt automatisch deaktiviert. Die `buy()` Methode prüft die Lagerverfügbarkeit vor dem Kauf.
 
-Verwaltet einzelne Produkte mit vollständiger Validierung:
+### Store Class
+Verwaltet die Produktkollektion. Der Constructor stellt sicher, dass nur Product-Objekte hinzugefügt werden. Beim Hinzufügen wird geprüft, ob das Produkt bereits existiert. Die `order()` Methode ermöglicht den Kauf mehrerer Produkte.
 
--   Name, Price, Quantity → alle validiert (kein Müll erlaubt)
--   Automatische Deaktivierung bei quantity=0
--   `buy()` Methode prüft Stock-Verfügbarkeit
+### Main Program
+CLI mit 4 Optionen: Produkte auflisten, Gesamtbestand anzeigen, Bestellung aufgeben, Programm beenden. Input-Validierung ist durchgehend implementiert - bei ungültigen Eingaben werden aussagekräftige Fehlermeldungen angezeigt statt eines Crashes.
 
-### Store Class (`store.py`)
+## Was ich dabei gelernt habe
 
-Verwaltet die Produkt-Collection:
-
--   Type-Checks im Constructor (nur Product-Objekte erlaubt)
--   Duplikat-Prüfung beim Hinzufügen
--   `get_all_products()` gibt nur aktive Produkte zurück
--   `order()` für Bestellungen mit mehreren Produkten
-
-### Main Program (`main.py`)
-
-CLI mit 4 Optionen:
-
-1.  Liste alle Produkte
-2.  Zeige Gesamt-Stock
-3.  Bestelle Produkte
-4.  Quit (oder Ctrl+C 😉)
-
-Input-Validierung everywhere - Text statt Zahl? ValueError. Produktnummer außerhalb Range? IndexError. Alles wird sauber gefangen.
-
-## Was ich dabei gelernt hab
+### Der Range-Check Bug
+Der subtilste Fehler war `if x < len() or x > len()` - sieht auf den ersten Blick korrekt aus, ist aber logisch falsch. Mit `or` ist die Bedingung fast immer true. Korrekt wäre `if x < 1 or x > len()`. Diese Erfahrung hat mir gezeigt, wie wichtig es ist, Boolean Logic sorgfältig zu prüfen.
 
 ### Exception Handling Strategy
+Business Logic (products.py, store.py) wirft Exceptions bei Regelverletzungen. Presentation Layer (main.py) fängt diese ab und zeigt dem User verständliche Meldungen. Keine print() Statements in der Business Logic, try-except Blöcke nur dort wo sie hingehören.
 
-**Business Logic** (products.py, store.py):
-
--   Raised Exceptions bei Regel-Verletzungen
--   Keine print() Statements für Errors
--   Klare Exception-Messages
-
-**Presentation Layer** (main.py):
-
--   Catched Exceptions mit try-except
--   Zeigt benutzerfreundliche Fehlermeldungen
--   Loop läuft weiter, kein Crash
-
-### OOP Best Practices
-
--   **Single Responsibility**: Jede Klasse macht genau eine Sache
--   **Composition over Inheritance**: Store *hat* Products, ist kein Product
--   **Fail Fast**: Validierung im Constructor, nicht später
--   **Type-Checks**: `isinstance()` vor Operations
-
-### Range-Check Bug (wichtigste Lektion!)
-
-❌ **FALSCH**: `if x < len() or x > len()` → logischer Fehler! ✅ **RICHTIG**: `if x < 1 or x > len()` → korrekte Grenzen
-
-Dieser Bug hat mich gelehrt: Boolean Logic GENAU prüfen, nicht einfach `or` verwenden weil's intuitiv klingt.
-
-### Validierung: Type DANN Value
+### Type Checks vor Value Checks
+Erst den Typ prüfen, dann den Wert validieren. Sonst kann `if not price` bei 0 fälschlicherweise einen Fehler werfen, obwohl 0 ein valider Preis sein kann.
 
 ```python
-# ✅ RICHTIG
+# Korrekte Reihenfolge
 if not isinstance(price, (int, float)):
     raise TypeError('Price must be numeric')
 if price < 0:
     raise ValueError('Price cannot be negative')
-
-# ❌ FALSCH
-if not price:  # Bug: 0 wird als invalid behandelt
-    raise ValueError(...)
 ```
 
-Bei Zahlen ist `0` ein valider Wert, nicht "empty"!
+### 0 ist nicht "empty"
+Bei Strings ist `""` empty. Bei Zahlen ist `None` empty. Aber `0` ist ein valider Wert, nicht empty. Ein wichtiger Unterschied, den man beachten muss.
 
 ## Projekt Status
 
--   ✅ **Phase 1 & 2 Complete** (CRITICAL + HIGH Priority Bugs)
--   ✅ **14/14 Issues gefixt** (100% der wichtigen Bugs)
--   ✅ **Production Ready** (robustes Error-Handling)
--   ⏳ **Phase 3 Optional** (MEDIUM Priority Edge Cases)
+Alle CRITICAL (7/7) und HIGH Priority (7/7) Bugs sind behoben. Von 20 identifizierten Issues sind 14 erledigt. Die restlichen 6 sind Edge Cases, die in der Praxis selten auftreten (z.B. Produktnamen die nur aus Leerzeichen bestehen).
+
+Der Code ist production-ready. Es gibt keine bekannten Bugs, die das Programm zum Absturz bringen können.
 
 ## Testing
 
-Getestete Edge Cases:
+Getestete Szenarien:
+- Text-Input bei erwarteten Zahlenwerten
+- Negative Zahlen
+- Produktnummer 0 oder außerhalb des gültigen Bereichs
+- Bestellmenge übersteigt Lagerbestand
+- Versuche 0 Stück zu kaufen
+- Duplikat-Produkte hinzufügen
+- Ctrl+C während der Programmausführung
 
--   Text-Input statt Zahlen → ValueError mit Message
--   Negative Zahlen → ValueError mit Message
--   Produktnummer 0 oder außerhalb Range → IndexError
--   Mehr bestellen als auf Lager → Exception mit Stock-Info
--   quantity=0 kaufen → Exception
--   Duplikat-Produkt hinzufügen → ValueError
--   Ctrl+C drücken → "Best Bye!" Message 👋
-
-## Code-Qualität
-
-Priority
-
-Fixed
-
-Status
-
-🔴 CRITICAL
-
-7/7
-
-100% ✅
-
-🟡 HIGH
-
-7/7
-
-100% ✅
-
-🟢 MEDIUM
-
-2/6
-
-33% (optional)
-
-Alle CRITICAL und HIGH Priority Issues sind gefixt. MEDIUM sind Edge Cases die in der Praxis selten auftreten (z.B. Whitespace-only product names).
+Alle Fälle werden sauber abgefangen mit aussagekräftigen Error-Messages.
 
 ## Technisches
 
--   **Python Version**: 3.x (getestet mit 3.13)
--   **Dependencies**: Keine (Standard Library only)
--   **OOP Patterns**: SOLID Principles, Design by Contract
--   **Exception Types**: TypeError, ValueError, IndexError, KeyboardInterrupt
+- Python 3.x (getestet mit 3.13)
+- Keine externen Dependencies
+- SOLID Principles, Design by Contract
+- Exception Types: TypeError, ValueError, IndexError, KeyboardInterrupt
 
-## Warum Best "Bye"?
+## Best "Bye" Easter Egg
 
-Weil der Exit-Message ein Typo-Witz ist:
-
-```python
-print('Thank you for choosing BEST BYE! 😉')
-```
-
-Ja, das war Absicht. 😄
+Die Exit-Nachricht lautet "Thank you for choosing BEST BYE!" - der Typo ist beabsichtigt. 😉
 
 ---
 
-**Projekt**: Masterschool E-Commerce Backend **Status**: Production Ready **Entwickelt**: Dezember 2025 **Developer**: Bastian
+**Masterschool E-Commerce Backend** | Dezember 2025 | Bastian

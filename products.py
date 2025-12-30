@@ -10,14 +10,14 @@ class Product:
             self.name = str(name)
 
         if not isinstance(price, (int, float)):
-            raise ValueError(f'price must be a real numeric, not of type None or alphabetic')
+            raise TypeError(f'price must be a real numeric, not of type None or alphabetic')
         elif price < 0:
             raise ValueError(f'no negative prices possible')
         else:
             self.price = float(price)
 
         if not isinstance(quantity, int):
-            raise ValueError(f'quantity must be a real numeric, not of type None or alphabetic')
+            raise TypeError(f'quantity must be a real numeric, not of type None or alphabetic')
         elif quantity < 0:
             raise ValueError(f'no negative stock possible')
         else:
